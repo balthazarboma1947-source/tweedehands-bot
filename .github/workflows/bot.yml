@@ -45,7 +45,7 @@ jobs:
           git config user.name "Tweedehands Bot"
           git config user.email "actions@github.com"
 
-          git add seen.json
+          git add seen.json first_run_done.txt
 
           git diff --cached --quiet || git commit -m "Update seen advertisements"
 
