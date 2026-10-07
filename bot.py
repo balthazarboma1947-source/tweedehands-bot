@@ -399,4 +399,4 @@ def main():
 
 
 if __name__ == "__main__":
-    stuur_test_email()
+    main()
