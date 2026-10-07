@@ -23,6 +23,7 @@ MAX_PRIJS = 50
 MAX_RESULTATEN = 25
 
 SEEN_FILE = Path("seen.json")
+EERSTE_RUN_FILE = Path("first_run_done.txt")
 
 
 # ============================================================
@@ -228,6 +229,7 @@ def verwerk_advertentie(
     entry,
     zoekterm,
     gezien,
+    stuur_melding=True,
 ):
 
     advertentie_id = (
@@ -279,13 +281,14 @@ def verwerk_advertentie(
 
         return False
 
-    stuur_email(
-        titel=titel,
-        zoekterm=zoekterm,
-        prijs=prijs,
-        link=link,
-        beschrijving=samenvatting,
-    )
+    if stuur_melding:
+        stuur_email(
+            titel=titel,
+            zoekterm=zoekterm,
+            prijs=prijs,
+            link=link,
+            beschrijving=samenvatting,
+        )
 
     gezien.add(
         advertentie_id
@@ -305,6 +308,7 @@ def main():
     gezien = laad_gezien()
 
     totaal_nieuw = 0
+        eerste_run = not EERSTE_RUN_FILE.exists()
 
     for zoekterm in ZOEKOPDRACHTEN:
 
@@ -331,6 +335,7 @@ def main():
                         entry,
                         zoekterm,
                         gezien,
+                        stuur_melding=not eerste_run,
                     )
 
                     if nieuw:
@@ -351,6 +356,10 @@ def main():
             )
 
     bewaar_gezien(gezien)
+
+    if eerste_run:
+        EERSTE_RUN_FILE.touch()
+        print("Eerste run voltooid. Bestaande advertenties zijn opgeslagen.")
 
     print(
         f"Klaar. {totaal_nieuw} "
