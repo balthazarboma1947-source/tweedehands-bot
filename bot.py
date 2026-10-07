@@ -47,7 +47,33 @@ EMAIL_TO = os.environ["EMAIL_TO"]
 # ============================================================
 
 def stuur_email(titel, zoekterm, prijs, link, beschrijving=""):
+def stuur_test_email():
 
+    bericht = EmailMessage()
+
+    bericht["Subject"] = "Test - Tweedehands Bot"
+    bericht["From"] = EMAIL_FROM
+    bericht["To"] = EMAIL_TO
+
+    bericht.set_content(
+        "Dit is een testmail van je Tweedehands Bot.\n\n"
+        "Als je deze mail ontvangt, werkt de Gmail-verzending correct."
+    )
+
+    with smtplib.SMTP_SSL(
+        EMAIL_HOST,
+        EMAIL_PORT,
+        timeout=30,
+    ) as smtp:
+
+        smtp.login(
+            EMAIL_USERNAME,
+            EMAIL_PASSWORD,
+        )
+
+        smtp.send_message(bericht)
+
+    print("TESTMAIL VERSTUURD")
     bericht = EmailMessage()
 
     bericht["Subject"] = f"Nieuwe 2dehands-match: {titel}"
@@ -370,4 +396,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    stuur_test_email()
