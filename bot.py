@@ -16,6 +16,8 @@ import feedparser
 ZOEKOPDRACHTEN = [
     "Tap",
     "Bar",
+    "Flügel",
+    "Stella Artois",
 ]
 
 MAX_PRIJS = 50
