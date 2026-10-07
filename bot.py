@@ -308,7 +308,7 @@ def main():
     gezien = laad_gezien()
 
     totaal_nieuw = 0
-        eerste_run = not EERSTE_RUN_FILE.exists()
+    eerste_run = not EERSTE_RUN_FILE.exists()
 
     for zoekterm in ZOEKOPDRACHTEN:
 
