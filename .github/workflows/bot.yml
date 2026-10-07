@@ -1,0 +1,52 @@
+name: Tweedehands E-mail Bot
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+
+  zoek:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Repository ophalen
+        uses: actions/checkout@v4
+
+      - name: Python installeren
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dependencies installeren
+        run: |
+          pip install -r requirements.txt
+
+      - name: Bot uitvoeren
+        env:
+          EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          python bot.py
+
+      - name: Gezien advertenties opslaan
+        run: |
+          git config user.name "Tweedehands Bot"
+          git config user.email "actions@github.com"
+
+          git add seen.json
+
+          git diff --cached --quiet || git commit -m "Update seen advertisements"
+
+          git push
